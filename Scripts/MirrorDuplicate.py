@@ -46,13 +46,13 @@ class Mirror_X(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [False, True, True]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[1] = -obj.rotation_euler[1]
             obj.rotation_euler[2] = -obj.rotation_euler[2]
                     
         bpy.ops.transform.resize(value=(-1, 1, 1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             obj.lock_scale = [False, False, False]
         
@@ -78,13 +78,13 @@ class Mirror_Y(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [True, False, True]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[0] = -obj.rotation_euler[0]
             obj.rotation_euler[2] = -obj.rotation_euler[2]
                     
         bpy.ops.transform.resize(value=(1, -1, 1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             obj.lock_scale = [False, False, False]
         
@@ -110,13 +110,13 @@ class Mirror_Z(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [True, True, False]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[0] = -obj.rotation_euler[0]
             obj.rotation_euler[1] = -obj.rotation_euler[1]
                     
         bpy.ops.transform.resize(value=(1, 1, -1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             obj.lock_scale = [False, False, False]
         
