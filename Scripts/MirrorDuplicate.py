@@ -215,6 +215,6 @@ def unregister():
     bpy.utils.unregister_class(Mirror_Y)
     bpy.utils.unregister_class(Mirror_Z)
 
-if __name__ == "__main__":
-    register()
+#if __name__ == "__main__":
+#    register()
     
