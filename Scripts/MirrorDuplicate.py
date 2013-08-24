@@ -19,7 +19,7 @@
 bl_info = {
     "name": "Mirror Duplicate",
     "author": "Richard Wilks",
-    "version": (0, 0, 3),
+    "version": (0, 0, 4),
     "blender": (2, 68, 2),
     "location": "View3D > Tool Shelf",
     "description": "Mirror objects around the 3D Cursor via duplication",
@@ -31,6 +31,11 @@ bpy.types.Scene.apply_mirror_duplicate = bpy.props.BoolProperty(
     name="Apply Mirror",
     description="Apply the scale and recalculate the normals",
     default=False)
+    
+bpy.types.Scene.linked_duplicate = bpy.props.BoolProperty(
+    name="Linked",
+    description="Create linked duplicates",
+    default=False)
 
 #Mirror along the X-axis
 class Mirror_X(bpy.types.Operator):
@@ -38,11 +43,12 @@ class Mirror_X(bpy.types.Operator):
     bl_idname = "object.mirror_x"
     bl_label = "Mirror X"
     bl_context = "objectmode"
+    bl_options = {"UNDO"}
 
     def execute(self, context):
-        bpy.ops.object.duplicate()
+        scn = bpy.context.scene   
+        bpy.ops.object.duplicate(linked=scn.linked_duplicate)
         selected = context.selected_objects
-        scn = bpy.context.scene
         apply_mirror = scn.apply_mirror_duplicate
         
         #Store current pivot point and switch to 3D Cursor
@@ -53,13 +59,13 @@ class Mirror_X(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [False, True, True]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[1] = -obj.rotation_euler[1]
             obj.rotation_euler[2] = -obj.rotation_euler[2]
                     
         bpy.ops.transform.resize(value=(-1, 1, 1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             scn.objects.active = obj
             obj.lock_scale = [False, False, False]
@@ -74,6 +80,7 @@ class Mirror_X(bpy.types.Operator):
       
         bpy.context.space_data.pivot_point = pivot
         scn.apply_mirror_duplicate = False
+        scn.linked_duplicate = False
         return {'FINISHED'}
 
 #Mirror along the Y-axis    
@@ -82,11 +89,12 @@ class Mirror_Y(bpy.types.Operator):
     bl_idname = "object.mirror_y"
     bl_label = "Mirror Y"
     bl_context = "objectmode"
+    bl_options = {"UNDO"}
 
     def execute(self, context):
-        bpy.ops.object.duplicate()
-        selected = context.selected_objects
         scn = bpy.context.scene
+        bpy.ops.object.duplicate(linked=scn.linked_duplicate)
+        selected = context.selected_objects
         apply_mirror = scn.apply_mirror_duplicate
         
         #Store current pivot point and switch to 3D Cursor
@@ -97,13 +105,13 @@ class Mirror_Y(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [True, False, True]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[0] = -obj.rotation_euler[0]
             obj.rotation_euler[2] = -obj.rotation_euler[2]
                     
         bpy.ops.transform.resize(value=(1, -1, 1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             scn.objects.active = obj
             obj.lock_scale = [False, False, False]
@@ -118,6 +126,7 @@ class Mirror_Y(bpy.types.Operator):
       
         bpy.context.space_data.pivot_point = pivot
         scn.apply_mirror_duplicate = False
+        scn.linked_duplicate = False
         return {'FINISHED'}
 
 #Mirror along the Z-axis    
@@ -126,11 +135,12 @@ class Mirror_Z(bpy.types.Operator):
     bl_idname = "object.mirror_z"
     bl_label = "Mirror Z"
     bl_context = "objectmode"
+    bl_options = {"UNDO"}
 
     def execute(self, context):
-        bpy.ops.object.duplicate()
-        selected = context.selected_objects
         scn = bpy.context.scene
+        bpy.ops.object.duplicate(linked=scn.linked_duplicate)
+        selected = context.selected_objects
         apply_mirror = scn.apply_mirror_duplicate
         
         #Store current pivot point and switch to 3D Cursor
@@ -141,13 +151,13 @@ class Mirror_Z(bpy.types.Operator):
             #Lock scaling in unwanted axes
             obj.lock_scale = [True, True, False]
             
-            #Correct rotation of duplicate positive <--> negative
+            #Correct the rotation of duplicate positive <--> negative
             obj.rotation_euler[0] = -obj.rotation_euler[0]
             obj.rotation_euler[1] = -obj.rotation_euler[1]
                     
         bpy.ops.transform.resize(value=(1, 1, -1))
         
-        #Restore locks and pivot original states
+        #Restore locks and pivot to original states
         for obj in selected:
             scn.objects.active = obj
             obj.lock_scale = [False, False, False]
@@ -162,6 +172,7 @@ class Mirror_Z(bpy.types.Operator):
       
         bpy.context.space_data.pivot_point = pivot
         scn.apply_mirror_duplicate = False
+        scn.linked_duplicate = False
         return {'FINISHED'}
 
 #Draw buttons in Tool Shelf
@@ -176,13 +187,19 @@ class VIEW3D_PT_mirrorduplicate(bpy.types.Panel):
         obj = context.object
         scn = context.scene
         
+        #If Linked is enabled, hide Apply Mirror and vice versa
         sub = layout.split()
-        sub.prop(scn, 'apply_mirror_duplicate')
+        if scn.linked_duplicate == False:
+            sub.prop(scn, 'apply_mirror_duplicate')
+        
+        if scn.apply_mirror_duplicate == False:
+            sub.prop(scn, 'linked_duplicate')
 
         sub = layout.split()
         sub.operator('object.mirror_x')
         sub.operator('object.mirror_y')
         sub.operator('object.mirror_z')
+
 
 #registration of operator classes and panel class      
 def register():
