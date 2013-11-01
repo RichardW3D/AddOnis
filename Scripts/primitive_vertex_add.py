@@ -23,11 +23,13 @@ bl_info = {
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
     "description": "Create option to add a vertex object",
+    "warning": "Broken in Edit Mode",
     "category": "Object"}
 
 import bpy
 
 # Create a single vertex object... the hard way
+# Broken in Edit Mode
 class primitive_vertex_add(bpy.types.Operator):
     bl_idname = "mesh.primitive_vertex_add"
     bl_label = "Vertex"
