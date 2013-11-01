@@ -23,6 +23,7 @@ bl_info = {
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
     "description": "Create option to add a vertex object",
+    "wiki_url": "https://github.com/RichardW3D/AddOnis/wiki/primitive_vertex_add",
     "warning": "Broken in Edit Mode",
     "category": "Object"}
 

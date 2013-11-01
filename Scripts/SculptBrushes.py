@@ -24,7 +24,7 @@ bl_info = {
     "location": "Sculpt Mode > Shift-A",
     "description": "A menu with basic brushes",
     "warning": "",
-    "wiki_url": "",
+    "wiki_url": "https://github.com/RichardW3D/AddOnis/wiki/Sculpt-Brushes",
     "tracker_url": "",
     "category": "3D View"}
     

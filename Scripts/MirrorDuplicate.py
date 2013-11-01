@@ -23,6 +23,7 @@ bl_info = {
     "blender": (2, 68, 2),
     "location": "View3D > Tool Shelf",
     "description": "Mirror objects around the 3D Cursor via duplication",
+    "wiki_url": "https://github.com/RichardW3D/AddOnis/wiki/Mirror-Duplicate",
     "category": "3D View"}
 
 import bpy
