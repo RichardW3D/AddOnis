@@ -19,7 +19,7 @@
 bl_info = {
     "name": "Vertex",
     "author": "Richard Wilks",
-    "version": (0, 2, 0),
+    "version": (0, 2, 1),
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
     "description": "Create option to add a vertex object",
@@ -30,7 +30,6 @@ bl_info = {
 import bpy
 
 # Create a single vertex object... the hard way
-# Broken in Edit Mode
 class primitive_vertex_add(bpy.types.Operator):
     bl_idname = "mesh.primitive_vertex_add"
     bl_label = "Vertex"
@@ -41,10 +40,16 @@ class primitive_vertex_add(bpy.types.Operator):
         mesh = bpy.ops.mesh
         obj = bpy.ops.object
         
-        mesh.primitive_plane_add()
-        obj.mode_set(mode='EDIT')
-        mesh.merge(type='CENTER')
-        obj.mode_set(mode='OBJECT')
+        if bpy.context.mode == 'EDIT_MESH':
+            bpy.ops.mesh.select_all(action='TOGGLE')
+            mesh.primitive_plane_add()
+            mesh.merge(type='CENTER')
+            
+        elif bpy.context.mode ==  'OBJECT':        
+            mesh.primitive_plane_add()
+            obj.mode_set(mode='EDIT')
+            mesh.merge(type='CENTER')
+            obj.mode_set(mode='OBJECT')
         return {'FINISHED'}
 
 def menu_func(self, context):
