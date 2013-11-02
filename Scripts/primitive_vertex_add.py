@@ -1,6 +1,7 @@
 ##############################################################################
 # Copyright © 2013 Richard Wilks #
-# November 1st #
+# Started November 1st #
+# Last updated November 2nd #
 # #
 # This program is free software: you can redistribute it and/or modify #
 # it under the terms of the GNU General Public License as published by #
@@ -19,7 +20,7 @@
 bl_info = {
     "name": "Vertex",
     "author": "Richard Wilks",
-    "version": (0, 2, 1),
+    "version": (0, 3, 0),
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
     "description": "Create option to add a vertex object",
@@ -29,33 +30,24 @@ bl_info = {
 
 import bpy
 
-# Create a single vertex object... the hard way
 class primitive_vertex_add(bpy.types.Operator):
+    """Add an object with a single vertex"""
     bl_idname = "mesh.primitive_vertex_add"
     bl_label = "Vertex"
     bl_context = "objectmode"
     bl_options = {"REGISTER", "UNDO"}
     
     def execute(self, context):
-        mesh = bpy.ops.mesh
-        obj = bpy.ops.object
+        mesh = bpy.data.meshes.new("Vertex")
+        mesh.vertices.add(1)
         
-        if bpy.context.mode == 'EDIT_MESH':
-            bpy.ops.mesh.select_all(action='TOGGLE')
-            mesh.primitive_plane_add()
-            mesh.merge(type='CENTER')
-            
-        elif bpy.context.mode ==  'OBJECT':        
-            mesh.primitive_plane_add()
-            obj.mode_set(mode='EDIT')
-            mesh.merge(type='CENTER')
-            obj.mode_set(mode='OBJECT')
+        from bpy_extras import object_utils
+        object_utils.object_data_add(context, mesh, operator=None)
         return {'FINISHED'}
 
 def menu_func(self, context):
     self.layout.operator(primitive_vertex_add.bl_idname, icon="PLUGIN")
 
-# Register and unregister  
 def register():
     bpy.utils.register_module(__name__)
     bpy.types.INFO_MT_mesh_add.append(menu_func)
