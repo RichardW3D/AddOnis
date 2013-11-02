@@ -19,12 +19,12 @@
 bl_info = {
     "name": "Vertex",
     "author": "Richard Wilks",
-    "version": (0, 1, 0),
+    "version": (0, 2, 0),
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
     "description": "Create option to add a vertex object",
     "wiki_url": "https://github.com/RichardW3D/AddOnis/wiki/primitive_vertex_add",
-    "warning": "Broken in Edit Mode",
+    "warning": "",
     "category": "Object"}
 
 import bpy
@@ -42,9 +42,9 @@ class primitive_vertex_add(bpy.types.Operator):
         obj = bpy.ops.object
         
         mesh.primitive_plane_add()
-        obj.editmode_toggle()
+        obj.mode_set(mode='EDIT')
         mesh.merge(type='CENTER')
-        obj.editmode_toggle()
+        obj.mode_set(mode='OBJECT')
         return {'FINISHED'}
 
 def menu_func(self, context):
