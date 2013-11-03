@@ -1,7 +1,7 @@
 ##############################################################################
 # Copyright © 2013 Richard Wilks #
 # Started November 1st #
-# Last updated November 2nd #
+# Last updated November 3rd #
 # #
 # This program is free software: you can redistribute it and/or modify #
 # it under the terms of the GNU General Public License as published by #
@@ -18,12 +18,12 @@
 ##############################################################################
 
 bl_info = {
-    "name": "Vertex",
+    "name": "Add Vertex",
     "author": "Richard Wilks",
-    "version": (0, 3, 0),
+    "version": (0, 3, 1),
     "blender": (2, 69, 1),
     "location": "View3D > Add > Mesh",
-    "description": "Create option to add a vertex object",
+    "description": "Adds an object with a single vertex.",
     "wiki_url": "https://github.com/RichardW3D/AddOnis/wiki/primitive_vertex_add",
     "warning": "",
     "category": "Object"}
@@ -31,10 +31,9 @@ bl_info = {
 import bpy
 
 class primitive_vertex_add(bpy.types.Operator):
-    """Add an object with a single vertex"""
+    """Add a vertex"""
     bl_idname = "mesh.primitive_vertex_add"
     bl_label = "Vertex"
-    bl_context = "objectmode"
     bl_options = {"REGISTER", "UNDO"}
     
     def execute(self, context):
